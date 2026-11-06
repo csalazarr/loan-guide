@@ -1477,10 +1477,15 @@ tb.querySelectorAll('tr').forEach(r=>[...r.children].forEach((c,i)=>{if(c.tagNam
 #fsv .ln+.ln{margin-top:1px}
 #fsv pre .c{color:#6A9955}#fsv pre .k{color:#569CD6}#fsv pre .s{color:#CE9178}#fsv pre .f{color:#DCDCAA}
 body.fs-lock{overflow:hidden}
-#fsv .hint{font:13px var(--f-ui);color:#BDBDBD;padding:8px 12px 0}
+#fsv .rot{display:none;align-items:center;gap:10px;margin:10px 12px 0;padding:10px 12px;border:2px solid #F2C811;border-radius:6px;background:#2E2810;color:#FFE680;font:14px/1.35 var(--f-ui)}
+#fsv .rot b{color:#fff}
+#fsv .rot svg{flex:none;color:#F2C811;transform-origin:50% 50%;animation:rotPh 2.4s ease-in-out infinite}
+@keyframes rotPh{0%,25%{transform:rotate(0)}50%,80%{transform:rotate(90deg)}100%{transform:rotate(0)}}
+@media (prefers-reduced-motion:reduce){#fsv .rot svg{animation:none;transform:rotate(90deg)}}
+@media (orientation:portrait) and (max-width:640px){#fsv .rot{display:flex}}
 @media print{.fsb,.code .tap,#fsv{display:none!important}}
 </style>
-<div id="fsv" role="dialog" aria-modal="true" aria-label="Code, full screen"><div class="bar"><span class="ttl"></span><button type="button" class="cp">Copy</button><button type="button" class="cl">✕ Close</button></div><div class="hint">Long lines continue on the next line, indented further.</div><pre tabindex="0"></pre></div>
+<div id="fsv" role="dialog" aria-modal="true" aria-label="Code, full screen"><div class="bar"><span class="ttl"></span><button type="button" class="cp">Copy</button><button type="button" class="cl">✕ Close</button></div><div class="rot" role="note"><svg viewBox="0 0 24 24" width="30" height="30" aria-hidden="true"><rect class="ph" x="7" y="2" width="10" height="20" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><circle class="ph" cx="12" cy="18.5" r="1" fill="currentColor"/></svg><span><b>Turn your phone sideways</b> to read the code more easily.</span></div><pre tabindex="0"></pre></div>
 <script>
 (()=>{const v=document.getElementById('fsv'),vp=v.querySelector('pre'),ttl=v.querySelector('.ttl'),cp=v.querySelector('.cp');let src=null,last=null;
 const open=(c,b)=>{src=c.querySelector('pre');last=b;vp.innerHTML=src.innerHTML.split('\n').map(l=>{const m=l.match(/^((?:<span[^>]*>)?)([ \t]*)/),ind=m[2].replace(/\t/g,'    ').length,rest=m[1]+l.slice(m[0].length);return '<div class="ln" style="--i:'+ind+'">'+(rest||'&#8203;')+'</div>'}).join('');ttl.textContent=c.querySelector('.ch').firstChild.textContent;
