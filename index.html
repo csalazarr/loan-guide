@@ -1436,4 +1436,21 @@ steps.forEach(s=>io.observe(s));
 mark((location.hash.slice(1).split('-')[0])||steps[0].id);
 </script>
 
+<style>
+@media (max-width:640px){
+ table.t{min-width:0!important;width:100%;font-size:16px}
+ table.t thead,table.t tr:has(> th){display:none}
+ table.t,table.t tbody,table.t tr,table.t td{display:block;width:100%;box-sizing:border-box}
+ table.t tr{border:1px solid var(--line);border-radius:8px;margin:0 0 12px;padding:6px 12px;background:var(--surface)}
+ table.t td{border:0!important;border-bottom:1px solid var(--line)!important;padding:8px 0!important;overflow-wrap:anywhere}
+ table.t td:last-child{border-bottom:0!important}
+ table.t td[data-label]::before{content:attr(data-label);display:block;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:2px}
+ table.t td:first-child{font-weight:600}
+ *:has(> table.t){overflow-x:visible!important}
+}
+</style>
+<script>
+document.querySelectorAll('table.t').forEach(tb=>{const h=[...tb.querySelectorAll('thead th, tr:first-child th')].map(x=>x.textContent.trim());
+tb.querySelectorAll('tr').forEach(r=>[...r.children].forEach((c,i)=>{if(c.tagName==='TD'&&h[i])c.setAttribute('data-label',h[i])}))});
+</script>
 </body></html>
