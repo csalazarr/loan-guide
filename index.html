@@ -1492,7 +1492,7 @@ const open=(c,b)=>{src=c.querySelector('pre');last=b;vp.innerHTML=src.innerHTML.
  
  v.classList.add('open');document.body.classList.add('fs-lock');vp.scrollTop=0;v.querySelector('.cl').focus();history.pushState({fsv:1},'')};
 const close=(fromPop)=>{if(!v.classList.contains('open'))return;v.classList.remove('open');document.body.classList.remove('fs-lock');if(last)last.focus();if(!fromPop&&history.state&&history.state.fsv)history.back()};
-document.querySelectorAll('.code').forEach(c=>{const h=c.querySelector('.ch'),b=document.createElement('button');b.type='button';b.className='fsb';b.innerHTML='<span aria-hidden="true">⛶</span> Full screen';
+document.querySelectorAll('.code').forEach(c=>{const h=c.querySelector('.ch'),b=document.createElement('button');b.type='button';b.className='fsb';b.innerHTML='<span aria-hidden="true">⛶</span><span class="fsl"> Full screen</span>';
  h.insertBefore(b,h.querySelector('.copy'));b.addEventListener('click',()=>open(c,b));
  const tip=document.createElement('div');tip.className='tap';tip.textContent='Tip: tap Full screen to read this code on the whole screen.';c.appendChild(tip)});
 v.querySelector('.cl').addEventListener('click',()=>close(false));
@@ -1512,45 +1512,80 @@ document.querySelectorAll('.code').forEach(c=>io.observe(c));})();
 #hdrTog{position:fixed;z-index:6;right:12px;top:calc(env(safe-area-inset-top,0px) + 8px);font:600 14px var(--f-ui);min-height:44px;padding:0 14px;border-radius:22px;border:2px solid #F2C811;background:#252423;color:#fff;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.3);display:none;align-items:center;gap:6px}
 #hdrTog.on{display:inline-flex}
 @media (max-width:640px){
- .pipe{display:grid!important;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px!important;overflow:visible!important;padding-block:2px 10px!important}
+ .pipe{display:grid!important;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px!important;overflow:visible!important;padding-block:0 2px!important}
  .pipe .arrow{display:none!important}
  .pipe .node{min-width:0!important;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;text-align:center;font-size:12px!important;line-height:1.2;padding:6px 4px!important;min-height:52px;white-space:normal}
  .pipe .node b{width:24px;height:24px;font-size:13px}
- .pipe .node{min-height:48px;font-size:0!important;border-radius:24px;padding:0!important}
- .pipe .node b{width:30px!important;height:30px!important;font-size:15px!important}
- .stepnow{display:block!important}
- .pipe .node.on{box-shadow:0 0 0 2px #fff inset}
- .tb{display:grid!important;grid-template-columns:auto 1fr auto;align-items:center;column-gap:10px;row-gap:4px;padding-block:8px!important}
- .tb .logo{grid-row:1/3}
- .tb h1{grid-column:2;font-size:17px!important;line-height:1.2}
- .tb .badge{grid-column:2;grid-row:2;justify-self:start;margin:0!important;font-size:11px}
- .tb .hdrHide{grid-column:3;grid-row:1/3;margin:0!important;min-height:48px;min-width:48px;border-radius:24px;font-size:14px}
- .tb .fsPg{display:none!important}
+ .pipe .node{min-height:36px;font-size:0!important;border:0!important;background:transparent!important;box-shadow:none!important;padding:0!important}
+ .pipe .node b{width:26px!important;height:26px!important;font-size:13px!important;background:#4A4846}
+ .pipe .node.on b{background:#F2C811!important;color:#252423!important}
+ .stepnow{display:block!important;font-size:14px!important;padding:0 16px 6px!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+ .tb{display:flex!important;flex-wrap:nowrap!important;align-items:center;gap:6px!important;padding-block:4px!important}
+ .tb .logo{display:none!important}
+ .tb h1{flex:1;min-width:0;font-size:16px!important;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+ .tb .hdrHide{margin:0!important;min-height:44px;border-radius:22px;padding:0 12px;font-size:14px}
+ .tb .fsl{display:none}
+ .tb .fsPg{min-width:44px;padding:0;justify-content:center;font-size:18px}
+ .tb .badge{display:none!important}
+ .tb .hdrHide:not(.fsPg) .hl{display:none}
+ .tb .hdrHide{min-width:44px;padding:0!important;justify-content:center}
+ .stepnow .hdrHide{margin:0!important;min-height:44px;border-radius:22px;font-size:14px;padding:0 12px}
+ .tb .fsPg{grid-column:4;grid-row:1/3;margin:0!important;min-height:44px;min-width:44px;padding:0 10px;border-radius:22px;font-size:13px}
+
+ .tb .fsPg{order:9}
+ .tb h1{min-width:0}
+}
+@media (max-width:374px){ .stepnow .fsl{display:none} .stepnow .capt{font-size:14px}
+ .tb .hdrHide:not(.fsPg){min-height:44px;min-width:44px}
  #hdrTog{min-height:48px;font-size:15px}
 }
 .tb .hdrHide{margin-left:6px}.hdrHide{font:600 13px var(--f-ui);min-height:36px;padding:0 12px;border-radius:18px;border:1.5px solid #8A8886;background:transparent;color:#fff;cursor:pointer;white-space:nowrap;flex:none}
 @media print{#hdrTog,.hdrHide{display:none!important}}
-.stepnow{display:none;font:600 15px var(--f-ui);color:#fff;padding:0 16px 10px}.stepnow span{color:#F2C811}
+.stepnow{display:none;font:600 15px var(--f-ui);color:#fff;padding:0 16px 10px}.stepnow .capt{flex:1;min-width:0}.stepnow .capt span{color:#F2C811}.stepnow .capb{display:flex;gap:8px;flex:none}
 </style>
 <button id="hdrTog" type="button" aria-label="Show the top bar"><span aria-hidden="true">▾</span> Show steps</button>
 <script>
-(()=>{const top=document.querySelector('header.top');if(!top)return;const pipe=top.querySelector('.pipe');if(pipe){const cap=document.createElement('div');cap.className='stepnow';cap.setAttribute('aria-hidden','true');pipe.after(cap);
+(()=>{const top=document.querySelector('header.top');if(!top)return;const pipe=top.querySelector('.pipe');if(pipe){const cap=document.createElement('div');cap.className='stepnow';pipe.after(cap);
  const upd=()=>{const on=pipe.querySelector('.node.on');if(!on)return;const n=on.querySelector('b').textContent.trim(),name=[...on.childNodes].filter(x=>x.nodeType===3).map(x=>x.textContent).join('').trim();
- cap.innerHTML=(n==='✓'?'<span>After step 5</span> · ':(n==='0'?'<span>Before you start</span> · ':'<span>Step '+n+' of 5</span> · '))+name};upd();
+ let tx=cap.querySelector('.capt');if(!tx){tx=document.createElement('span');tx.className='capt';tx.setAttribute('aria-hidden','true');cap.prepend(tx)}tx.innerHTML=(n==='✓'?'<span>After step 5</span> · ':(n==='0'?'<span>Before you start</span> · ':'<span>Step '+n+' of 5</span> · '))+name};upd();
  new MutationObserver(upd).observe(pipe,{subtree:true,attributes:true,attributeFilter:['class']})}const tog=document.getElementById('hdrTog');
-const hb=document.createElement('button');hb.type='button';hb.className='hdrHide';hb.innerHTML='<span aria-hidden="true">▴</span> Hide';hb.setAttribute('aria-label','Hide the top bar');
+const hb=document.createElement('button');hb.type='button';hb.className='hdrHide';hb.innerHTML='<span aria-hidden="true">▴</span><span class="hl"> Hide</span>';hb.setAttribute('aria-label','Hide the top bar');hb.title='Hide the top bar';
 const row=top.firstElementChild&&top.firstElementChild.tagName!=='NAV'?top.firstElementChild:top;const badge=[...row.querySelectorAll('*')].find(e=>/SAMPLE DATA/i.test(e.textContent)&&!e.children.length);
 (badge?badge.parentNode:row).insertBefore(hb,badge?badge.nextSibling:null);
 let pin=false;const set=(h,man)=>{if(man)pin=h;else if(pin)return;top.classList.toggle('hid',h);tog.classList.toggle('on',h)};
 hb.addEventListener('click',()=>set(true,1));tog.addEventListener('click',()=>set(false,1));
 const de=document.documentElement,rq=de.requestFullscreen||de.webkitRequestFullscreen;
 if(rq&&(document.fullscreenEnabled||document.webkitFullscreenEnabled)){const fb=document.createElement('button');fb.type='button';fb.className='hdrHide fsPg';
- const lab=()=>{const on=document.fullscreenElement||document.webkitFullscreenElement;fb.innerHTML=on?'<span aria-hidden="true">✕</span> Exit full screen':'<span aria-hidden="true">⛶</span> Full screen';};lab();
+ const lab=()=>{const on=document.fullscreenElement||document.webkitFullscreenElement;fb.innerHTML=on?'<span aria-hidden="true">✕</span><span class="fsl"> Exit full screen</span>':'<span aria-hidden="true">⛶</span><span class="fsl"> Full screen</span>';fb.setAttribute('aria-label',on?'Exit full screen':'Full screen');};lab();
  fb.addEventListener('click',()=>{const on=document.fullscreenElement||document.webkitFullscreenElement;if(on)(document.exitFullscreen||document.webkitExitFullscreen).call(document);else rq.call(de).catch&&rq.call(de).catch(()=>{})});
  document.addEventListener('fullscreenchange',lab);document.addEventListener('webkitfullscreenchange',lab);hb.parentNode.insertBefore(fb,hb)}
+const mq=matchMedia('(max-width:640px)'),btnHome=hb.parentNode,place=()=>{const cap=top.querySelector('.stepnow');const bs=[...top.querySelectorAll('.hdrHide')];if(false){let g=cap.querySelector('.capb');if(!g){g=document.createElement('span');g.className='capb';cap.appendChild(g)}bs.forEach(x=>g.appendChild(x))}else{bs.forEach(x=>btnHome.appendChild(x))}};
+place();mq.addEventListener('change',place);
 let lastY=scrollY,acc=0;addEventListener('scroll',()=>{const y=scrollY,d=y-lastY;lastY=y;if(document.body.classList.contains('fs-lock'))return;
  if(y<top.offsetHeight){set(false);acc=0;return}
  acc=(Math.sign(d)===Math.sign(acc))?acc+d:d;
  if(acc>24)set(true);else if(acc<-24)set(false)},{passive:true});})();
+</script>
+<style>
+#fsWarn{display:none;position:relative;z-index:7;background:#F2C811;color:#252423;font:600 15px/1.3 var(--f-ui);padding:8px 8px 8px 14px;align-items:center;gap:8px}
+#fsWarn.on{display:flex}
+#fsWarn .msg{flex:1;min-width:0}
+#fsWarn .go{flex:none;min-height:40px;padding:0 12px;border-radius:20px;border:0;background:#252423;color:#fff;font:600 14px var(--f-ui);cursor:pointer}
+#fsWarn .x{flex:none;min-width:40px;min-height:40px;border:0;background:transparent;color:#252423;font:700 18px var(--f-ui);cursor:pointer}
+#fsWarn .how{display:block;font-weight:400;font-size:13px;margin-top:2px}
+@media print{#fsWarn{display:none!important}}
+</style>
+<div id="fsWarn" role="alert"><span class="msg">⚠️ fullscreen pls or kakainin ko fries mo 🍟<span class="how"></span></span><button type="button" class="go">Full screen</button><button type="button" class="x" aria-label="Close this message">✕</button></div>
+<script>
+(()=>{const w=document.getElementById('fsWarn');const de=document.documentElement,rq=de.requestFullscreen||de.webkitRequestFullscreen;
+const can=!!(rq&&(document.fullscreenEnabled||document.webkitFullscreenEnabled));const standalone=matchMedia('(display-mode: standalone)').matches||navigator.standalone;
+const isFs=()=>!!(document.fullscreenElement||document.webkitFullscreenElement)||standalone;
+let closed=false;try{closed=sessionStorage.getItem('fsWarnX')==='1'}catch(e){}
+const top=document.querySelector('header.top');if(top)top.prepend(w);
+if(!can){w.querySelector('.go').remove();w.querySelector('.how').textContent='On iPhone: tap Share, then Add to Home Screen, and open it from there.'}
+const upd=()=>w.classList.toggle('on',!closed&&!isFs());upd();
+w.querySelector('.go')?.addEventListener('click',()=>{try{const r=rq.call(de);r&&r.catch&&r.catch(()=>{})}catch(e){}});
+w.querySelector('.x').addEventListener('click',()=>{closed=true;try{sessionStorage.setItem('fsWarnX','1')}catch(e){}upd()});
+document.addEventListener('fullscreenchange',upd);document.addEventListener('webkitfullscreenchange',upd);})();
 </script>
 </body></html>
