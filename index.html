@@ -1505,4 +1505,31 @@ cp.addEventListener('click',()=>{const txt=src.innerText,ok=()=>{cp.textContent=
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){const b=e.target.querySelector('.fsb');b.classList.add('nudge');io.unobserve(e.target)}}),{threshold:.5});
 document.querySelectorAll('.code').forEach(c=>io.observe(c));})();
 </script>
+<style>
+.top{transition:transform .25s ease}
+.top.hid{transform:translateY(calc(-100% - env(safe-area-inset-top,0px)))}
+@media (prefers-reduced-motion:reduce){.top{transition:none}}
+#hdrTog{position:fixed;z-index:6;right:12px;top:calc(env(safe-area-inset-top,0px) + 8px);font:600 14px var(--f-ui);min-height:44px;padding:0 14px;border-radius:22px;border:2px solid #F2C811;background:#252423;color:#fff;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.3);display:none;align-items:center;gap:6px}
+#hdrTog.on{display:inline-flex}
+.tb .hdrHide{margin-left:6px}.hdrHide{font:600 13px var(--f-ui);min-height:36px;padding:0 12px;border-radius:18px;border:1.5px solid #8A8886;background:transparent;color:#fff;cursor:pointer;white-space:nowrap;flex:none}
+@media print{#hdrTog,.hdrHide{display:none!important}}
+</style>
+<button id="hdrTog" type="button" aria-label="Show the top bar"><span aria-hidden="true">▾</span> Show steps</button>
+<script>
+(()=>{const top=document.querySelector('header.top');if(!top)return;const tog=document.getElementById('hdrTog');
+const hb=document.createElement('button');hb.type='button';hb.className='hdrHide';hb.innerHTML='<span aria-hidden="true">▴</span> Hide';hb.setAttribute('aria-label','Hide the top bar');
+const row=top.firstElementChild&&top.firstElementChild.tagName!=='NAV'?top.firstElementChild:top;const badge=[...row.querySelectorAll('*')].find(e=>/SAMPLE DATA/i.test(e.textContent)&&!e.children.length);
+(badge?badge.parentNode:row).insertBefore(hb,badge?badge.nextSibling:null);
+let hold=0;const set=(h,man)=>{if(!man&&Date.now()<hold)return;if(man)hold=Date.now()+700;top.classList.toggle('hid',h);tog.classList.toggle('on',h)};
+hb.addEventListener('click',()=>set(true,1));tog.addEventListener('click',()=>set(false,1));
+const de=document.documentElement,rq=de.requestFullscreen||de.webkitRequestFullscreen;
+if(rq&&(document.fullscreenEnabled||document.webkitFullscreenEnabled)){const fb=document.createElement('button');fb.type='button';fb.className='hdrHide';
+ const lab=()=>{const on=document.fullscreenElement||document.webkitFullscreenElement;fb.innerHTML=on?'<span aria-hidden="true">✕</span> Exit full screen':'<span aria-hidden="true">⛶</span> Full screen';};lab();
+ fb.addEventListener('click',()=>{const on=document.fullscreenElement||document.webkitFullscreenElement;if(on)(document.exitFullscreen||document.webkitExitFullscreen).call(document);else rq.call(de).catch&&rq.call(de).catch(()=>{})});
+ document.addEventListener('fullscreenchange',lab);document.addEventListener('webkitfullscreenchange',lab);hb.parentNode.insertBefore(fb,hb)}
+let lastY=scrollY,acc=0;addEventListener('scroll',()=>{const y=scrollY,d=y-lastY;lastY=y;if(document.body.classList.contains('fs-lock'))return;
+ if(y<top.offsetHeight){set(false);acc=0;return}
+ acc=(Math.sign(d)===Math.sign(acc))?acc+d:d;
+ if(acc>24)set(true);else if(acc<-24)set(false)},{passive:true});})();
+</script>
 </body></html>
