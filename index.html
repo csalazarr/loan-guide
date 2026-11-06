@@ -1527,8 +1527,9 @@ document.querySelectorAll('.code').forEach(c=>io.observe(c));})();
  .tb .fsl{display:none}
  .tb .fsPg{min-width:44px;padding:0;justify-content:center;font-size:18px}
  .tb .badge{display:none!important}
- .tb .hdrHide:not(.fsPg) .hl{display:none}
  .tb .hdrHide{min-width:44px;padding:0!important;justify-content:center}
+ .tb .hdrHide:not(.fsPg){padding:0 14px!important;border:2px solid #F2C811!important;color:#F2C811!important;gap:4px}
+ .tb .hdrHide:not(.fsPg).nudge{animation:fsbPulse 1.1s ease-out 3}
  .stepnow .hdrHide{margin:0!important;min-height:44px;border-radius:22px;font-size:14px;padding:0 12px}
  .tb .fsPg{grid-column:4;grid-row:1/3;margin:0!important;min-height:44px;min-width:44px;padding:0 10px;border-radius:22px;font-size:13px}
 
@@ -1549,11 +1550,11 @@ document.querySelectorAll('.code').forEach(c=>io.observe(c));})();
  const upd=()=>{const on=pipe.querySelector('.node.on');if(!on)return;const n=on.querySelector('b').textContent.trim(),name=[...on.childNodes].filter(x=>x.nodeType===3).map(x=>x.textContent).join('').trim();
  let tx=cap.querySelector('.capt');if(!tx){tx=document.createElement('span');tx.className='capt';tx.setAttribute('aria-hidden','true');cap.prepend(tx)}tx.innerHTML=(n==='✓'?'<span>After step 5</span> · ':(n==='0'?'<span>Before you start</span> · ':'<span>Step '+n+' of 5</span> · '))+name};upd();
  new MutationObserver(upd).observe(pipe,{subtree:true,attributes:true,attributeFilter:['class']})}const tog=document.getElementById('hdrTog');
-const hb=document.createElement('button');hb.type='button';hb.className='hdrHide';hb.innerHTML='<span aria-hidden="true">▴</span><span class="hl"> Hide</span>';hb.setAttribute('aria-label','Hide the top bar');hb.title='Hide the top bar';
+const hb=document.createElement('button');hb.type='button';hb.className='hdrHide';hb.innerHTML='<span aria-hidden="true">▴</span><span class="hl"> Hide bar</span>';hb.setAttribute('aria-label','Hide the top bar');hb.title='Hide the top bar';
 const row=top.firstElementChild&&top.firstElementChild.tagName!=='NAV'?top.firstElementChild:top;const badge=[...row.querySelectorAll('*')].find(e=>/SAMPLE DATA/i.test(e.textContent)&&!e.children.length);
 (badge?badge.parentNode:row).insertBefore(hb,badge?badge.nextSibling:null);
-let pin=false;const set=(h,man)=>{if(man)pin=h;else if(pin)return;top.classList.toggle('hid',h);tog.classList.toggle('on',h)};
-hb.addEventListener('click',()=>set(true,1));tog.addEventListener('click',()=>set(false,1));
+let pin=false;const set=(h,man)=>{if(man)pin=h;else if(pin)return;top.classList.toggle('hid',h);tog.classList.toggle('on',h&&pin)};
+hb.addEventListener('click',()=>set(true,1));setTimeout(()=>hb.classList.add('nudge'),1200);tog.addEventListener('click',()=>set(false,1));
 const de=document.documentElement,rq=de.requestFullscreen||de.webkitRequestFullscreen;
 if(rq&&(document.fullscreenEnabled||document.webkitFullscreenEnabled)){const fb=document.createElement('button');fb.type='button';fb.className='hdrHide fsPg';
  const lab=()=>{const on=document.fullscreenElement||document.webkitFullscreenElement;fb.innerHTML=on?'<span aria-hidden="true">✕</span><span class="fsl"> Exit full screen</span>':'<span aria-hidden="true">⛶</span><span class="fsl"> Full screen</span>';fb.setAttribute('aria-label',on?'Exit full screen':'Full screen');};lab();
