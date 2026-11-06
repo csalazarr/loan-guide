@@ -1621,7 +1621,7 @@ const r=v&&v.querySelector('.rot');if(r){const s=document.createElement('div');s
 const vis=new Set();let cur=null,dismissed=new WeakSet(),never=false;try{never=localStorage.getItem('landToastX')==='1'}catch(e){}
 let timer=null;const done=()=>{never=true;try{localStorage.setItem('landToastX','1')}catch(e){}};
 const upd=()=>{const list=[...vis].filter(c=>!dismissed.has(c));cur=list[0]||null;const show=!never&&!!cur&&port.matches&&!(fsv&&fsv.classList.contains('open'));T.classList.toggle('on',show);
- if(show&&!timer){timer=setTimeout(()=>{done();upd()},8000)}};
+ if(show&&!timer){timer=setTimeout(()=>{done();upd()},1500)}};
 const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)vis.add(e.target);else{vis.delete(e.target);dismissed.delete(e.target)}});upd()},{threshold:.4});
 document.querySelectorAll('.code').forEach(c=>io.observe(c));
 T.querySelector('.go').addEventListener('click',()=>{if(cur)cur.querySelector('.fsb').click();upd()});
@@ -1636,7 +1636,7 @@ port.addEventListener('change',upd);if(fsv)new MutationObserver(upd).observe(fsv
 </style>
 <div id="newVer" role="alert"><span class="m"><b>⚠️ You're on an old version of this guide.</b> Refresh the page to get the latest one.</span><button type="button">↻ Refresh</button></div>
 <script>
-(()=>{const BUILD='20261106095915';const n=document.getElementById('newVer');n.querySelector('button').addEventListener('click',()=>{location.replace(location.pathname+'?v='+Date.now()+location.hash)});
+(()=>{const BUILD='20261106100027';const n=document.getElementById('newVer');n.querySelector('button').addEventListener('click',()=>{location.replace(location.pathname+'?v='+Date.now()+location.hash)});
 if(!/^https?:/.test(location.protocol))return;
 const check=()=>fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{if(j&&j.build&&j.build!==BUILD)n.classList.add('on')}).catch(()=>{});
 check();document.addEventListener('visibilitychange',()=>{if(!document.hidden)check()});setInterval(check,120000);})();
