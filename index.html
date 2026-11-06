@@ -1583,12 +1583,12 @@ let lastY=scrollY,acc=0;addEventListener('scroll',()=>{const y=scrollY,d=y-lastY
 (()=>{const w=document.getElementById('fsWarn');const de=document.documentElement,rq=de.requestFullscreen||de.webkitRequestFullscreen;
 const can=!!(rq&&(document.fullscreenEnabled||document.webkitFullscreenEnabled));const standalone=matchMedia('(display-mode: standalone)').matches||navigator.standalone;
 const isFs=()=>!!(document.fullscreenElement||document.webkitFullscreenElement)||standalone;
-let closed=false;try{closed=sessionStorage.getItem('fsWarnX')==='1'}catch(e){}
+let closed=false;try{closed=localStorage.getItem('fsWarnX')==='1'}catch(e){}
 const top=document.querySelector('header.top');if(top)top.prepend(w);
 if(!can){w.querySelector('.go').remove();w.querySelector('.how').textContent='On iPhone: tap Share, then Add to Home Screen, and open it from there.'}
 const upd=()=>w.classList.toggle('on',!closed&&!isFs());upd();
 w.querySelector('.go')?.addEventListener('click',()=>{try{const r=rq.call(de);r&&r.catch&&r.catch(()=>{})}catch(e){}});
-w.querySelector('.x').addEventListener('click',()=>{closed=true;try{sessionStorage.setItem('fsWarnX','1')}catch(e){}upd()});
+w.querySelector('.x').addEventListener('click',()=>{closed=true;try{localStorage.setItem('fsWarnX','1')}catch(e){}upd()});
 document.addEventListener('fullscreenchange',upd);document.addEventListener('webkitfullscreenchange',upd);})();
 </script>
 <style>
@@ -1618,12 +1618,12 @@ const r=v&&v.querySelector('.rot');if(r){const s=document.createElement('div');s
 <div id="landToast" role="status" aria-live="polite"><svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="18.5" r="1" fill="currentColor"/></svg><span class="m"><b>Code ahead.</b> Turn your phone sideways and open it full screen to read it easily.</span><button type="button" class="go">⛶ Full screen</button><button type="button" class="x" aria-label="Close this tip">✕</button></div>
 <script>
 (()=>{const T=document.getElementById('landToast'),fsv=document.getElementById('fsv');const port=matchMedia('(orientation:portrait) and (max-width:640px)');
-const vis=new Set();let cur=null,dismissed=new WeakSet();
-const upd=()=>{const list=[...vis].filter(c=>!dismissed.has(c));cur=list[0]||null;T.classList.toggle('on',!!cur&&port.matches&&!(fsv&&fsv.classList.contains('open')))};
+const vis=new Set();let cur=null,dismissed=new WeakSet(),never=false;try{never=localStorage.getItem('landToastX')==='1'}catch(e){}
+const upd=()=>{const list=[...vis].filter(c=>!dismissed.has(c));cur=list[0]||null;T.classList.toggle('on',!never&&!!cur&&port.matches&&!(fsv&&fsv.classList.contains('open')))};
 const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)vis.add(e.target);else{vis.delete(e.target);dismissed.delete(e.target)}});upd()},{threshold:.4});
 document.querySelectorAll('.code').forEach(c=>io.observe(c));
 T.querySelector('.go').addEventListener('click',()=>{if(cur)cur.querySelector('.fsb').click();upd()});
-T.querySelector('.x').addEventListener('click',()=>{if(cur)dismissed.add(cur);upd()});
+T.querySelector('.x').addEventListener('click',()=>{never=true;try{localStorage.setItem('landToastX','1')}catch(e){}upd()});
 port.addEventListener('change',upd);if(fsv)new MutationObserver(upd).observe(fsv,{attributes:true,attributeFilter:['class']});})();
 </script>
 <style>
@@ -1634,7 +1634,7 @@ port.addEventListener('change',upd);if(fsv)new MutationObserver(upd).observe(fsv
 </style>
 <div id="newVer" role="alert"><span class="m"><b>⚠️ You're on an old version of this guide.</b> Refresh the page to get the latest one.</span><button type="button">↻ Refresh</button></div>
 <script>
-(()=>{const BUILD='20261106095345';const n=document.getElementById('newVer');n.querySelector('button').addEventListener('click',()=>{location.replace(location.pathname+'?v='+Date.now()+location.hash)});
+(()=>{const BUILD='20261106095750';const n=document.getElementById('newVer');n.querySelector('button').addEventListener('click',()=>{location.replace(location.pathname+'?v='+Date.now()+location.hash)});
 if(!/^https?:/.test(location.protocol))return;
 const check=()=>fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{if(j&&j.build&&j.build!==BUILD)n.classList.add('on')}).catch(()=>{});
 check();document.addEventListener('visibilitychange',()=>{if(!document.hidden)check()});setInterval(check,120000);})();
