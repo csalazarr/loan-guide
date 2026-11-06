@@ -1488,10 +1488,12 @@ body.fs-lock{overflow:hidden}
 <div id="fsv" role="dialog" aria-modal="true" aria-label="Code, full screen"><div class="bar"><span class="ttl"></span><button type="button" class="cp">Copy</button><button type="button" class="cl">✕ Close</button></div><div class="rot" role="note"><svg viewBox="0 0 24 24" width="30" height="30" aria-hidden="true"><rect class="ph" x="7" y="2" width="10" height="20" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><circle class="ph" cx="12" cy="18.5" r="1" fill="currentColor"/></svg><span><b>Turn your phone sideways</b> to read the code more easily.</span></div><pre tabindex="0"></pre></div>
 <script>
 (()=>{const v=document.getElementById('fsv'),vp=v.querySelector('pre'),ttl=v.querySelector('.ttl'),cp=v.querySelector('.cp');let src=null,last=null;
-const open=(c,b)=>{src=c.querySelector('pre');last=b;vp.innerHTML=src.innerHTML.split('\n').map(l=>{const m=l.match(/^((?:<span[^>]*>)?)([ \t]*)/),ind=m[2].replace(/\t/g,'    ').length,rest=m[1]+l.slice(m[0].length);return '<div class="ln" style="--i:'+ind+'">'+(rest||'&#8203;')+'</div>'}).join('');ttl.textContent=c.querySelector('.ch').firstChild.textContent;
+let sy=0;try{history.scrollRestoration='manual'}catch(e){}
+const back=()=>{const y=sy;scrollTo(0,y);requestAnimationFrame(()=>scrollTo(0,y));setTimeout(()=>scrollTo(0,y),60);setTimeout(()=>scrollTo(0,y),250)};
+const open=(c,b)=>{sy=scrollY;src=c.querySelector('pre');last=b;vp.innerHTML=src.innerHTML.split('\n').map(l=>{const m=l.match(/^((?:<span[^>]*>)?)([ \t]*)/),ind=m[2].replace(/\t/g,'    ').length,rest=m[1]+l.slice(m[0].length);return '<div class="ln" style="--i:'+ind+'">'+(rest||'&#8203;')+'</div>'}).join('');ttl.textContent=c.querySelector('.ch').firstChild.textContent;
  
- v.classList.add('open');document.body.classList.add('fs-lock');vp.scrollTop=0;v.querySelector('.cl').focus();history.pushState({fsv:1},'')};
-const close=(fromPop)=>{if(!v.classList.contains('open'))return;v.classList.remove('open');document.body.classList.remove('fs-lock');if(last)last.focus();if(!fromPop&&history.state&&history.state.fsv)history.back()};
+ v.classList.add('open');document.body.classList.add('fs-lock');vp.scrollTop=0;v.querySelector('.cl').focus({preventScroll:true});history.pushState({fsv:1},'')};
+const close=(fromPop)=>{if(!v.classList.contains('open'))return;v.classList.remove('open');document.body.classList.remove('fs-lock');if(last)last.focus({preventScroll:true});if(!fromPop&&history.state&&history.state.fsv)history.back();back()};
 document.querySelectorAll('.code').forEach(c=>{const h=c.querySelector('.ch'),b=document.createElement('button');b.type='button';b.className='fsb';b.innerHTML='<span aria-hidden="true">⛶</span><span class="fsl"> Full screen</span>';
  h.insertBefore(b,h.querySelector('.copy'));b.addEventListener('click',()=>open(c,b));
  const tip=document.createElement('div');tip.className='tap';tip.textContent='Tip: tap Full screen to read this code on the whole screen.';c.appendChild(tip)});
