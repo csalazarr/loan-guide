@@ -1538,13 +1538,13 @@ document.querySelectorAll('.code').forEach(c=>io.observe(c));})();
 }
 @media (max-width:374px){ .stepnow .fsl{display:none} .stepnow .capt{font-size:14px}
  .tb .hdrHide:not(.fsPg){min-height:44px;min-width:44px}
- #hdrTog{min-height:48px;font-size:15px}
+ 
 }
 .tb .hdrHide{margin-left:6px}.hdrHide{font:600 13px var(--f-ui);min-height:36px;padding:0 12px;border-radius:18px;border:1.5px solid #8A8886;background:transparent;color:#fff;cursor:pointer;white-space:nowrap;flex:none}
 @media print{#hdrTog,.hdrHide{display:none!important}}
 .stepnow{display:none;font:600 15px var(--f-ui);color:#fff;padding:0 16px 10px}.stepnow .capt{flex:1;min-width:0}.stepnow .capt span{color:#F2C811}.stepnow .capb{display:flex;gap:8px;flex:none}
 </style>
-<button id="hdrTog" type="button" aria-label="Show the top bar"><span aria-hidden="true">▾</span> Show steps</button>
+<button id="hdrTog" type="button" aria-label="Show the top bar" title="Show the top bar"><span aria-hidden="true">✕</span></button>
 <script>
 (()=>{const top=document.querySelector('header.top');if(!top)return;const pipe=top.querySelector('.pipe');if(pipe){const cap=document.createElement('div');cap.className='stepnow';pipe.after(cap);
  const upd=()=>{const on=pipe.querySelector('.node.on');if(!on)return;const n=on.querySelector('b').textContent.trim(),name=[...on.childNodes].filter(x=>x.nodeType===3).map(x=>x.textContent).join('').trim();
@@ -1588,5 +1588,19 @@ const upd=()=>w.classList.toggle('on',!closed&&!isFs());upd();
 w.querySelector('.go')?.addEventListener('click',()=>{try{const r=rq.call(de);r&&r.catch&&r.catch(()=>{})}catch(e){}});
 w.querySelector('.x').addEventListener('click',()=>{closed=true;try{sessionStorage.setItem('fsWarnX','1')}catch(e){}upd()});
 document.addEventListener('fullscreenchange',upd);document.addEventListener('webkitfullscreenchange',upd);})();
+</script>
+<style>
+#hdrTog{width:44px;height:44px;min-height:44px;padding:0;justify-content:center;border-radius:50%;font-size:16px;border:1.5px solid rgba(255,255,255,.5);background:rgba(37,36,35,.75);box-shadow:0 1px 4px rgba(0,0,0,.3)}
+#swipeHint{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 6px);transform:translate(-50%,-60px);z-index:10001;background:#F2C811;color:#252423;font:600 13px var(--f-ui);padding:6px 12px;border-radius:16px;transition:transform .2s;pointer-events:none}
+#swipeHint.on{transform:translate(-50%,0)}
+</style>
+<div id="swipeHint" aria-hidden="true">↓ Let go to exit full screen</div>
+<script>
+(()=>{const v=document.getElementById('fsv'),h=document.getElementById('swipeHint');let y0=null,x0=0,arm=false;
+const fsOn=()=>!!(document.fullscreenElement||document.webkitFullscreenElement);const codeOn=()=>v&&v.classList.contains('open');
+addEventListener('touchstart',e=>{const t=e.touches[0];if(e.touches.length===1&&t.clientY<70&&(codeOn()||fsOn())){y0=t.clientY;x0=t.clientX}else y0=null},{passive:true});
+addEventListener('touchmove',e=>{if(y0===null)return;const t=e.touches[0],dy=t.clientY-y0,dx=Math.abs(t.clientX-x0);arm=dy>90&&dx<dy;h.classList.toggle('on',arm)},{passive:true});
+addEventListener('touchend',()=>{if(y0!==null&&arm){if(codeOn())v.querySelector('.cl').click();else if(fsOn())(document.exitFullscreen||document.webkitExitFullscreen).call(document)}y0=null;arm=false;h.classList.remove('on')},{passive:true});
+const r=v&&v.querySelector('.rot');if(r){const s=document.createElement('div');s.className='swp';s.textContent='Swipe down from the top to close.';s.style.cssText='font:13px var(--f-ui);color:#BDBDBD;padding:6px 12px 0';r.after(s)}})();
 </script>
 </body></html>
