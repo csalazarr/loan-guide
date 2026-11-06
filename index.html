@@ -1636,9 +1636,24 @@ port.addEventListener('change',upd);if(fsv)new MutationObserver(upd).observe(fsv
 </style>
 <div id="newVer" role="alert"><span class="m"><b>⚠️ You're on an old version of this guide.</b> Refresh the page to get the latest one.</span><button type="button">↻ Refresh</button></div>
 <script>
-(()=>{const BUILD='20261106100027';const n=document.getElementById('newVer');n.querySelector('button').addEventListener('click',()=>{location.replace(location.pathname+'?v='+Date.now()+location.hash)});
+(()=>{const BUILD='20261106100847';const n=document.getElementById('newVer');n.querySelector('button').addEventListener('click',()=>{location.replace(location.pathname+'?v='+Date.now()+location.hash)});
 if(!/^https?:/.test(location.protocol))return;
 const check=()=>fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{if(j&&j.build&&j.build!==BUILD)n.classList.add('on')}).catch(()=>{});
 check();document.addEventListener('visibilitychange',()=>{if(!document.hidden)check()});setInterval(check,120000);})();
+</script>
+<style>
+#fsv{position:fixed}
+#fsv .hd{position:absolute;top:0;left:0;right:0;z-index:2;background:#1F1F1F;padding-top:env(safe-area-inset-top,0px);transition:transform .22s ease;box-shadow:0 2px 8px rgba(0,0,0,.4)}
+#fsv.hh .hd{transform:translateY(-100%)}
+@media (prefers-reduced-motion:reduce){#fsv .hd{transition:none}}
+</style>
+<script>
+(()=>{const v=document.getElementById('fsv');if(!v)return;const pre=v.querySelector('pre');const hd=document.createElement('div');hd.className='hd';
+[...v.children].filter(e=>e!==pre).forEach(e=>hd.appendChild(e));v.insertBefore(hd,pre);v.style.paddingTop='0';
+const fit=()=>{pre.style.paddingTop=(hd.offsetHeight+12)+'px'};let last=0,acc=0;
+let wasOpen=false;new MutationObserver(()=>{const o=v.classList.contains('open');if(o&&!wasOpen){if(v.classList.contains('hh'))v.classList.remove('hh');requestAnimationFrame(fit);last=0;acc=0}wasOpen=o}).observe(v,{attributes:true,attributeFilter:['class']});
+addEventListener('resize',()=>{if(v.classList.contains('open'))fit()});
+pre.addEventListener('scroll',()=>{const y=pre.scrollTop,d=y-last;last=y;if(y<20){if(v.classList.contains('hh'))v.classList.remove('hh');acc=0;return}
+ acc=(Math.sign(d)===Math.sign(acc))?acc+d:d;if(acc>20)v.classList.add('hh');else if(acc<-20&&v.classList.contains('hh'))v.classList.remove('hh')},{passive:true});})();
 </script>
 </body></html>
